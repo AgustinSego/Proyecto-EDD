@@ -1,5 +1,8 @@
 primera version de gato.
 
+si ven algo raro haganmelo saber para explicarles igual documente un poco para que entienda un poco
+porfa leanlo 
+
 solo esta el modo pvp 
 
 ## Como correr el gato 
@@ -13,4 +16,10 @@ Y luego ejecutar:
 ./programa.exe   
 ````
 utilicen el .exe porque despues parece que va a servir para usarlo con tkinter para la interfaz
+
+cosas a mejorar:
+- preguntar por el nombre del jugador antes de empezar el juego
+- ver como calcular los puntajes, y donde colocar la lista de puntajes (se podria hacer un lista como funcion en gato.h tipo List* puntajes(), etc)
+- ver si los demas juegos se pueden meter a una carpeta para que sea mas comodo ejecutar
+- parece que cual se ingresa una opcion no valida en el pve se salta el turno de la cpu
 
