@@ -8,8 +8,8 @@ void mostrar_menu(){
     puts("     Game-Hub");
     puts("=====================================================");
 
-    puts("1) Nueva Categoría");
-    puts("2) Eliminar Categoría");
+    puts("1) Jugar al Gato");
+    puts("2) Salir De Game-Hub");
     
 }
 
@@ -19,14 +19,14 @@ int main(){
     do
     {
         mostrar_menu();
-        printf("Bienvenido a Game-Hub ingrese su opcion: ");
+        printf("Bienvenido a Game-Hub ingrese una opcion: ");
         scanf(" %c", &opcion);
 
         switch(opcion){
         case '1':
             gato();
             break;
-        case '8':
+        case '2':
             puts("Saliendo de Game-Hub");
             puts("Hasta la proxima");
             break;
@@ -34,7 +34,7 @@ int main(){
         puts("Opción no válida. Por favor, intente de nuevo.");
         }
         presioneTeclaParaContinuar();
-    } while(opcion != '2')
+    } while(opcion != '2');
 
     return 0;
 }

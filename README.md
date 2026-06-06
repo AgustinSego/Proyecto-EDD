@@ -1,33 +1,16 @@
-En este *repl* puedes encontrar varios ejemplos que te pueden ayudar con las tareas de estructura.
+primera version de gato.
 
-## Código de Ejemplo (tarea1)
-Para ejecutar el ejemplo tarea1 primero debemos compilar (en la carpeta raíz)
+solo esta el modo pvp 
+
+## Como correr el gato 
 ````
-gcc tdas/*.c tarea1.c -Wno-unused-result -o tarea1
+gcc tdas/*.c gato.c main.c -Wno-unused-result -o programa
 ````
+lo que hace tdas/*.c es correr todos los archivos de la carpeta de tdas, despues se compilan los demas archivos gato.c y main.c
 
 Y luego ejecutar:
 ````
-./tarea1
+./programa.exe   
 ````
+utilicen el .exe porque despues parece que va a servir para usarlo con tkinter para la interfaz
 
-## TDAs
-En la carpeta `tdas` se encuentran implementados distintos TDAs que puedes utilizar (lista, pila, cola, cola con prioridad y mapas). 
-
-Las implementaciones no son las más eficientes (todas usan como estructura de datos una **lista enlazada**), por lo que puedes reemplazarlas por las que has realizado en los labs.
-
-## Otros códigos (en carpeta examples)
-Para ejecutar los distintos ejemplos que hay en la carpeta `examples`, primero debes compilarlos. Si estamos en la carpeta raíz:
-````
-gcc tdas/*.c examples/example2_menu.c -Wno-unused-result -o example
-````
-Y luego ejecutarlos:
-````
-./example
-````
-
-Se incluyen los siguientes ejemplos:
-* `example1_list`: Uso del TDA Lista, inserción y eliminación de elementos.
-* `example2_menu`: Ejemplo de menú con submenús.
-* `example3_readcsv`: Ejemplo de lectura desde un archivo csv y almacenamiento en datos estructurados.
-* `example4_map`: Ejemplo de uso del TDA mapa.
