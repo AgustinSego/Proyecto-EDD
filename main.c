@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "tdas/extra.h"
-#include "gato.h"
+#include "juegos/gato.h"
 
 void mostrar_menu(){
     limpiarPantalla();
