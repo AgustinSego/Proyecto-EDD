@@ -160,6 +160,69 @@ void movimiento_aleatorio(char tablero[][3], char cpu){
     if(jugada != NULL) tablero[jugada->x][jugada->y] = cpu;
 }
 
+int minimax(char tablero[][3], int esMaximizador, char cpu)
+{
+    char jugador = 'X'; 
+    if(ganador(cpu, tablero)) return 10;
+    if(ganador(jugador, tablero)) return -10; 
+    if(empate(tablero)) return 0; 
+    if(esMaximizador){
+        int mejor = -1000;
+        for(int i  = 0; i < 3; i++){
+            for(int j = 0; j < 3; j ++){
+                if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
+                    char respaldo = tablero[i][j];
+                    tablero[i][j] = cpu;
+                    int valor = minimax(tablero, 0, cpu);
+                    tablero[i][j] = respaldo; 
+                    if(valor > mejor) mejor = valor;
+                }
+            }
+        }
+        return mejor;
+    }
+    else{
+        int mejor = 1000; 
+
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
+                    char respaldo = tablero[i][j];
+                    tablero[i][j] = jugador; 
+                    int valor = minimax(tablero, 1, cpu);
+                    tablero[i][j] = respaldo;
+                    if(valor < mejor) mejor = valor;
+                }
+            }
+        }
+        return mejor;
+    }
+}
+
+void mov_minimax(char tablero[][3], char cpu){
+    int mejorValor = -1000;
+    int mejorFila = -1;
+    int mejorColumna = -1;
+
+    for(int i = 0; i < 3; i ++){
+        for(int j = 0; j < 3; j++){
+            if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
+                char respaldo = tablero[i][j]; 
+                tablero[i][j] = cpu; 
+                int valor = minimax(tablero, 0, cpu);
+                tablero[i][j] = respaldo;
+
+                if(valor > mejorValor){
+                    mejorValor = valor; 
+                    mejorFila = i;
+                    mejorColumna = j;
+                }
+            }
+        }
+    }
+    if(mejorFila != -1) tablero[mejorFila][mejorColumna] = cpu;
+}
+
 void pve(char tablero[][3], char dificultad, char cpu){
     int posicion;
     int random;
@@ -209,14 +272,14 @@ void pve(char tablero[][3], char dificultad, char cpu){
             case '1': //facil
                 movimiento_aleatorio(tablero, cpu);
                 break;
-            /*case '2': //mormal
-                if(random < 50) movimiento_aleatorio();
-                else minimax(); // algoritmo para hacer mas dificil el cpu 
+            case '2': //mormal
+                if(random < 50) movimiento_aleatorio(tablero, cpu);
+                else mov_minimax(tablero, cpu); // algoritmo para hacer mas dificil el cpu 
                 break;
             case '3':  //dificil
-                if(random < 10) movimiento_aleatorio();
-                else minimax();
-                break;*/    
+                if(random < 10) movimiento_aleatorio(tablero, cpu);
+                else mov_minimax(tablero, cpu);
+                break;    
         }
 
         if(ganador(cpu, tablero)){
