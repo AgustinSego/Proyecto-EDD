@@ -20,4 +20,6 @@ cosas a mejorar:
 - ver como calcular los puntajes, y donde colocar la lista de puntajes (se podria hacer un lista como funcion en gato.h tipo List* puntajes(), etc)
 - poner lo que dijo el henriquez del while true 
 - parece que cual se ingresa una opcion no valida en el pve se salta el turno de la cpu
+- falta volver al menu principal cuando se gana en el buscaminas
+- falta poner una alerta para cuando la casilla ya este elegida en el buscaminas
 
