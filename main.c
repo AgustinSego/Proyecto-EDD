@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "tdas/extra.h"
 #include "juegos/gato.h"
+#include "juegos/conecta4.h"
 
 void mostrar_menu(){
     limpiarPantalla();
@@ -9,7 +10,8 @@ void mostrar_menu(){
     puts("=====================================================");
 
     puts("1) Jugar al Gato");
-    puts("2) Salir De Game-Hub");
+    puts("2) Jugar conecta 4");
+    puts("3) Salir De Game-Hub");
     
 }
 
@@ -27,6 +29,9 @@ int main(){
             gato();
             break;
         case '2':
+            conecta4();
+            break;  
+        case '3':
             puts("Saliendo de Game-Hub");
             puts("Hasta la proxima");
             break;

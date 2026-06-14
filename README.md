@@ -1,4 +1,5 @@
 primera version de gato.
+primera version conecta 4.
 
 si ven algo raro haganmelo saber para explicarles igual documente un poco para que entienda un poco
 porfa leanlo 
