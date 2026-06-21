@@ -3,7 +3,7 @@
 #include "juegos/gato.h"
 #include "juegos/conecta4.h"
 #include "juegos/buscaminas.h"
-#include "ranking.h"
+#include "juegos/ranking.h"
 
 
 void mostrar_menu(){
