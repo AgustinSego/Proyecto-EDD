@@ -44,7 +44,7 @@ int main(){
         puts("Opción no válida. Por favor, intente de nuevo.");
         }
         presioneTeclaParaContinuar();
-    } while(opcion != '2');
+    } while(opcion != '4');
 
     return 0;
 }
