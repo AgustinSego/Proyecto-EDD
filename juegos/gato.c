@@ -4,7 +4,7 @@
 #include "gato.h"
 #include "tdas/extra.h"
 #include "tdas/list.h"
-
+#include "ranking.h"
 
 void mostrar_menu_gato(){
     limpiarPantalla();
@@ -91,6 +91,7 @@ void pvp(char tablero[][3]){
         if(ganador(jugador, tablero)){
             mostrar_tablero_gato(tablero);
             printf("jugador %c gana!\n", jugador);
+            registrar_puntaje(JUEGA_GATO, 50);
             break;
         }
         if(empate(tablero)){
@@ -252,6 +253,7 @@ void pve(char tablero[][3], char dificultad, char cpu){
         if(ganador('X', tablero)){
             mostrar_tablero_gato(tablero);
             printf("jugador X gana!\n");
+            registrar_puntaje(JUEGA_GATO, 50);
             break;
         }
 

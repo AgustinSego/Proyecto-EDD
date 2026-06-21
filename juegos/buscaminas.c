@@ -5,6 +5,7 @@
 #include "tdas/extra.h"
 #include "tdas/list.h"
 
+#include "ranking.h"
 // BM = buscaminas.
 
 typedef struct
@@ -393,6 +394,7 @@ void jugarBM(TableroBM* tablero, char dificultad)
                 puts("==============================");
                 printf("     Has Ganado +%d PTS\n", puntaje_victoria);
                 puts("==============================");
+<<<<<<< HEAD
                 puts("");
                 // se le otorga puntaje segun la dificultad.
                 tablero->puntaje += puntaje_victoria;
@@ -403,6 +405,13 @@ void jugarBM(TableroBM* tablero, char dificultad)
                 primer_mov = true;
                 presioneTeclaParaContinuar();
                 continue;
+=======
+
+                //Calculo de puntaje basado en cantidad de minas de la dificultad
+                int puntaje_calculado = tablero -> num_minas * 10;
+                registrar_puntaje(JUEGA_BUSCAMINAS, puntaje_calculado);
+                break;
+>>>>>>> 1fc5f5d61bd1a0deb49e11fbb35582d982d290a0
             }
         }
     }

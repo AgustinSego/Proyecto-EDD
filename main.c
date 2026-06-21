@@ -3,6 +3,8 @@
 #include "juegos/gato.h"
 #include "juegos/conecta4.h"
 #include "juegos/buscaminas.h"
+#include "ranking.h"
+
 
 void mostrar_menu(){
     limpiarPantalla();
@@ -13,13 +15,15 @@ void mostrar_menu(){
     puts("1) Jugar al Gato");
     puts("2) Jugar Conecta 4");
     puts("3) Jugar Buscaminas");
-    puts("4) Salir De Game-Hub");
-    
+    puts("4) Ver Rankings del Hub");
+    puts("5) Salir de Game-Hub");
 }
 
 int main(){
     char opcion;
 
+    incializar_rankings();
+    
     do
     {
         mostrar_menu();
@@ -37,6 +41,9 @@ int main(){
             buscaminas();
             break;
         case '4':
+            mostrar_ranking();
+            break;
+        case '5':
             puts("Saliendo de Game-Hub");
             puts("Hasta la proxima");
             break;
@@ -44,7 +51,12 @@ int main(){
         puts("Opción no válida. Por favor, intente de nuevo.");
         }
         presioneTeclaParaContinuar();
+<<<<<<< HEAD
     } while(opcion != '4');
 
+=======
+    } while(opcion != '5');
+    liberar_ranking();
+>>>>>>> 1fc5f5d61bd1a0deb49e11fbb35582d982d290a0
     return 0;
 }

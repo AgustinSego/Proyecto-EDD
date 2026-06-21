@@ -4,6 +4,7 @@
 #include "tdas/extra.h"
 #include "tdas/list.h"
 #include "conecta4.h"
+#include "ranking.h"
 #define P1 'A'
 #define P2 'B'
 #define filas 6
@@ -113,6 +114,8 @@ void pvp_c4(juego *j){
         if(ganaron_c4(j,simbolo)){
             pintar(j);
             printf("el jugador %c gano\n", simbolo);
+
+            registrar_puntaje(JUEGA_CONECTA4, 100);
             break;
                 
         }

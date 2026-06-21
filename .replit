@@ -6,3 +6,26 @@ expertMode = true
 
 [deployment]
 deploymentTarget = "cloudrun"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gcc main.c tdas/*.c juegos/*.c -I . -I tdas -I juegos -Wno-unused-result -o gamehub && ./gamehub"
