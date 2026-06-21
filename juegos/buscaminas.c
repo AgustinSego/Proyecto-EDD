@@ -4,8 +4,8 @@
 #include <time.h>
 #include "tdas/extra.h"
 #include "tdas/list.h"
+#include "juegos/ranking.h"
 
-#include "ranking.h"
 // BM = buscaminas.
 
 typedef struct
@@ -16,10 +16,12 @@ typedef struct
     int minas_alrededor;
 }CasillaBM;
 
-typedef struct {
+typedef struct 
+{
     int filas;
     int columnas;
     int num_minas;
+    int puntaje;
     CasillaBM **matriz;
 } TableroBM;
 
@@ -28,7 +30,6 @@ typedef struct
     int x;
     int y;
 } Coord;
-
 
 void mostrar_menuBM()
 {
@@ -73,7 +74,7 @@ void mostrar_tableroBM(TableroBM* tablero)
             {
                 if (casilla.es_mina == true)
                 {
-                    printf("@ "); // @ para las minas. 
+                    printf("@  "); // @ para las minas. 
                 }  
                 else 
                 {
@@ -94,20 +95,22 @@ void mostrar_tableroBM(TableroBM* tablero)
     printf("\n");
 }
 
-
-TableroBM* crear_tablero_buscaminas(int filas, int columnas, int num_minas)
+TableroBM* crear_tableroBM(int filas, int columnas, int num_minas)
 {
     // se reserva memoria para el tablero
     TableroBM* tablero = (TableroBM*)malloc(sizeof(TableroBM));
     tablero->filas = filas;
     tablero->columnas = columnas;
     tablero->num_minas = num_minas;
+    // por comodidad altere el struct agregando la variable puntaje.
+    tablero->puntaje = 0;
 
     // se reserva memoria para la matriz del tablero.
     tablero->matriz = (CasillaBM**)malloc(filas * sizeof(CasillaBM*));
     for (int i = 0; i < filas ; i++)
     {
         tablero->matriz[i] = (CasillaBM*)malloc(columnas * sizeof(CasillaBM));
+
         for (int j = 0; j < columnas; j++)
         {
             tablero->matriz[i][j].es_mina = false;
@@ -115,12 +118,27 @@ TableroBM* crear_tablero_buscaminas(int filas, int columnas, int num_minas)
             tablero->matriz[i][j].bandera = false;
             tablero->matriz[i][j].minas_alrededor = 0;
         }
-    }
-
+    }    
     return tablero;
 }
 
-void poner_minas(TableroBM* tablero)
+// esta función reinicia el tablero a su estado inicial, indispensable para el bucle.
+// PD: si van a quitar el bucle, quitar todo lo relacionado a este para evitar errores.
+void reiniciar_tableroBM (TableroBM* tablero)
+{
+    for (int fila = 0;  fila < tablero->filas ; fila++)
+    {
+        for (int col = 0; col < tablero->columnas ; col++)
+        {
+            tablero->matriz[fila][col].es_mina = false;
+            tablero->matriz[fila][col].revelada = false;
+            tablero->matriz[fila][col].bandera = false;
+            tablero->matriz[fila][col].minas_alrededor = 0;
+        }
+    }
+}
+
+void poner_minas(TableroBM* tablero, int fila, int columna)
 {
     int cont_minas = 0;
 
@@ -133,6 +151,8 @@ void poner_minas(TableroBM* tablero)
 
         if (tablero->matriz[filaAzar][columnaAzar].es_mina == false)
         {
+            // esta condicion asegura que no explote una mina en el primer turno...
+            if (filaAzar == fila && columnaAzar == columna) continue;
             tablero->matriz[filaAzar][columnaAzar].es_mina = true;
             cont_minas++;
         }
@@ -165,6 +185,7 @@ void valor_minas_adyacentes(TableroBM* tablero)
                     }
                 }
             }
+            // se traspasa el valor a la casilla correspondiente.
             tablero->matriz[pos_f][pos_c].minas_alrededor = contador;
         }
     }
@@ -180,6 +201,7 @@ void liberar_memoriaBM(TableroBM* tablero)
 
 void bfs(TableroBM* tablero, int pos_f, int pos_c)
 {
+    // Se traspasa la coordenada inicial a la cola
     Coord* pos_i = (Coord*)malloc(sizeof(Coord));
     pos_i->x = pos_f;
     pos_i->y = pos_c;
@@ -188,13 +210,17 @@ void bfs(TableroBM* tablero, int pos_f, int pos_c)
     list_pushBack(cola, pos_i);
 
     tablero->matriz[pos_f][pos_c].revelada = true;
+    // se revela la casilla y se le otorgan 10 pts al puntaje final.
+    tablero->puntaje += 10;
 
     while(list_size(cola) > 0)
     {
+        // se extrae una posicion por visitar.
         Coord* actual = (Coord*)list_popFront(cola);; 
 
         if (tablero->matriz[actual->x][actual->y].minas_alrededor > 0) continue;
 
+        // se agregan las casillas vecinas.
         for (int rec_f = -1; rec_f <= 1; rec_f++) 
         {
             for (int rec_c = -1; rec_c <= 1; rec_c++) 
@@ -202,14 +228,19 @@ void bfs(TableroBM* tablero, int pos_f, int pos_c)
                 int vecino_fil = actual->x + rec_f;
                 int vecino_col = actual->y + rec_c;
 
+                // se verifica que se encuentre dentro del tablero.
                 if (vecino_fil >= 0 && vecino_fil < tablero->filas && vecino_col >= 0 && vecino_col < tablero->columnas) 
                 {
+                    // se revelan los vecinos que no son minas.
                     if (tablero->matriz[vecino_fil][vecino_col].revelada == false && tablero->matriz[vecino_fil][vecino_col].es_mina == false) 
                     {
                         tablero->matriz[vecino_fil][vecino_col].revelada = true;
+                        tablero->puntaje += 10;
                         
+                        // se verifica si el vecino tiene 0 minas alrededor.
                         if (tablero->matriz[vecino_fil][vecino_col].minas_alrededor == 0) 
                         {
+                            // se añade a la cola para expandirlo.
                             Coord* vecino = (Coord*)malloc(sizeof(Coord));
                             vecino->x = vecino_fil;
                             vecino->y = vecino_col;
@@ -236,19 +267,23 @@ bool condicion_victoriaBM(TableroBM* tablero)
     return true;
 }
 
-void jugarBM(TableroBM* tablero)
+void jugarBM(TableroBM* tablero, char dificultad)
 {
     int fila;
     int columna;
     char opcion;
+    bool primer_mov = true;
+    int puntaje_victoria;
 
-    poner_minas(tablero);
-    valor_minas_adyacentes(tablero);
+    // dependiendo de la dificultad es el puntaje que se otorga cuando se gana.
+    if (dificultad == '1') puntaje_victoria = 200;
+    else if (dificultad == '2') puntaje_victoria = 500;
+    else puntaje_victoria = 1000;
 
     while(true)
     {
         mostrar_tableroBM(tablero);
-        puts("Movimientos: [E] Revelar Casilla o Poner/Quitar Bandera [F]");
+        puts("Movimientos: [E] Revelar Casilla o [F] Poner/Quitar Bandera");
         puts("Ejemplo -> 7 7 E / (FILA, COLUMNA, MOVIMIENTO).");
 
         scanf("%d %d %c", &fila, &columna, &opcion);
@@ -256,18 +291,26 @@ void jugarBM(TableroBM* tablero)
         // se le resta 1 a cada parametro porque si no se desfasa la posición.
         fila--;
         columna--;
-
+        
+        // se verifica que se encuentre dentro del tablero.
         if (fila < 0 || fila >= tablero->filas || columna < 0 || columna >= tablero->columnas) 
         {
+            puts("");
             puts("Casilla no valida.");
+            puts("");
+            presioneTeclaParaContinuar();
             continue;
         }
 
+        // opcion poner banderas.
         if (opcion == 'F' || opcion == 'f') 
         {
             if (tablero->matriz[fila][columna].revelada == true) 
             {
+                puts("");
                 puts("No puedes poner bandera en una casilla ya revelada.");
+                puts("");
+                presioneTeclaParaContinuar();
             }
             else 
             {
@@ -277,27 +320,46 @@ void jugarBM(TableroBM* tablero)
             continue;
         }
 
+        // opcion revelar casillas.
         if (opcion == 'E' || opcion == 'e') 
         {
-            if (tablero->matriz[fila][columna].revelada) 
+
+            // Se genera el tablero despues de hacer la primera jugada.
+            // de esta forma nos aseguramos de que no explote en el primer turno.
+            if (primer_mov == true)
             {
-                puts("Esta casilla ya fue revelada.");
-                continue;
+                poner_minas(tablero, fila, columna);
+                valor_minas_adyacentes(tablero);
+                primer_mov = false;
             }
-            if (tablero->matriz[fila][columna].bandera) 
+
+            // Avisos
+            if (tablero->matriz[fila][columna].revelada == true) 
             {
-                puts("No se puede revelar una casilla sospechosa");
+                puts("");
+                puts("Esta casilla ya fue revelada.");
+                puts("");
+                presioneTeclaParaContinuar();
                 continue;
             }
 
-            if (tablero->matriz[fila][columna].es_mina) 
+            if (tablero->matriz[fila][columna].bandera == true) 
+            {
+                puts("");
+                puts("No se puede revelar una casilla sospechosa");
+                puts("");
+                presioneTeclaParaContinuar();
+                continue;
+            }
+
+            if (tablero->matriz[fila][columna].es_mina == true) 
             {
                 // Revelar todas las minas al perder
                 for (int i = 0; i < tablero->filas; i++) 
                 {
                     for (int j = 0; j < tablero->columnas; j++) 
                     {
-                        if (tablero->matriz[i][j].es_mina) tablero->matriz[i][j].revelada = true;
+                        if (tablero->matriz[i][j].es_mina == true) tablero->matriz[i][j].revelada = true;
                     }
                 }
                 mostrar_tableroBM(tablero);
@@ -305,9 +367,15 @@ void jugarBM(TableroBM* tablero)
                 puts("=================================");
                 puts(" Tocaste una mina. GAME OVER.");
                 puts("=================================");
+                puts("");
+                // mostrar el puntaje al perder (provisional).
+                printf("%d\n\n", tablero->puntaje);
+                registrar_puntaje(JUEGA_BUSCAMINAS, tablero->puntaje);
+                presioneTeclaParaContinuar();
                 break;
             }
 
+            // revelar casillas.
             if (tablero->matriz[fila][columna].minas_alrededor == 0) 
             {
                 bfs(tablero, fila, columna);
@@ -315,29 +383,37 @@ void jugarBM(TableroBM* tablero)
             else 
             {
                 tablero->matriz[fila][columna].revelada = true;
+                tablero->puntaje += 10;
             }
 
+            // se asegura que la cantidad de minas son iguales a la cantidad
+            // de casillas por revelar, ganando asi el juego.
             if (condicion_victoriaBM(tablero))
             {
-                mostrar_tableroBM;
+                mostrar_tableroBM(tablero);
                 puts("");
                 puts("==============================");
-                puts("    Felicidades Has Ganado");
+                printf("     Has Ganado +%d PTS\n", puntaje_victoria);
                 puts("==============================");
-
-                //Calculo de puntaje basado en cantidad de minas de la dificultad
-                int puntaje_calculado = tablero -> num_minas * 10;
-                registrar_puntaje(JUEGA_BUSCAMINAS, puntaje_calculado);
-                break;
+                puts("");
+                // se le otorga puntaje segun la dificultad.
+                tablero->puntaje += puntaje_victoria;
+                // se reinicia el tablero para mantener la continuidad del juego.
+                // la condicion de primer movimiento, vuelve a ser verdadera.
+                // por lo tanto al jugar el siguiente turno se regenerara el tablero.
+                reiniciar_tableroBM(tablero);
+                primer_mov = true;
+                presioneTeclaParaContinuar();
+                continue;
             }
         }
     }
 }
 
-
 void buscaminas()
 {
     char opcion;
+    int puntaje;
     TableroBM* tablero = NULL;
 
     do
@@ -346,32 +422,48 @@ void buscaminas()
         printf("Ingrese su opción: ");
         scanf(" %c", &opcion);
 
+        // opciones del submenu del buscaminas.
         switch(opcion)
         {
             case '1':
-                tablero = crear_tablero_buscaminas(8, 8, 10);
-                jugarBM(tablero);
+                tablero = crear_tableroBM(8, 8, 10);
+                jugarBM(tablero, 1);
                 liberar_memoriaBM(tablero);
                 break;
 
             case '2':
-                tablero = crear_tablero_buscaminas(16, 16, 40);
-                jugarBM(tablero);
+                tablero = crear_tableroBM(16, 16, 40);
+                jugarBM(tablero, 2);
                 liberar_memoriaBM(tablero);
                 break;
 
             case '3':
-                tablero = crear_tablero_buscaminas(24, 24, 99);
-                jugarBM(tablero);
+                tablero = crear_tableroBM(24, 24, 99);
+                jugarBM(tablero, 3);
                 liberar_memoriaBM(tablero);
                 break;
 
             case '4':
+                puts("");
                 puts("Volviendo al menu principal, gracias por jugar buscaminas.");
+                puts("");
+                presioneTeclaParaContinuar();
+                break;
+
+                // caso de prueba oculto al usuario.
+                // nos facilita verificar que pasa en casos de victoria
+                // ya que es un tablero 3 x 3.
+            case '9':
+                tablero = crear_tableroBM(3, 3, 2);
+                jugarBM(tablero, 3);
+                liberar_memoriaBM(tablero);
                 break;
 
             default:
+                puts("");
                 puts("Esta opción no existe, ingrese una opción correcta.");
+                puts("");
+                presioneTeclaParaContinuar();
                 break;
         }
     } while (opcion != '4');

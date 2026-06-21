@@ -16,10 +16,7 @@ Y luego ejecutar:
 utilicen el .exe porque despues parece que va a servir para usarlo con tkinter para la interfaz
 
 cosas a mejorar:
-- preguntar por el nombre del jugador antes de empezar el juego
-- ver como calcular los puntajes, y donde colocar la lista de puntajes (se podria hacer un lista como funcion en gato.h tipo List* puntajes(), etc)
-- poner lo que dijo el henriquez del while true 
+
+- ver como calcular los puntajes
 - parece que cual se ingresa una opcion no valida en el pve se salta el turno de la cpu
-- falta volver al menu principal cuando se gana en el buscaminas
-- falta poner una alerta para cuando la casilla ya este elegida en el buscaminas
 

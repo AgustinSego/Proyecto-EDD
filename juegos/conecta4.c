@@ -398,8 +398,20 @@ void pvp_c4(juego *j){
         
 
 }
+// MODIFICACION IMPLEMENTACION DE BUCLE (MODO ARCADE).
 void pve_c4(juego *j, int dificultad){
     List *historia = list_create();
+    int puntaje = 0;
+    int puntaje_victoriaC4;
+    int puntaje_empateC4;
+
+    if (dificultad == 1) puntaje_victoriaC4 = 250;
+    else if (dificultad == 2) puntaje_victoriaC4 = 500;
+    else puntaje_victoriaC4 = 1000;
+
+    if (dificultad == 1) puntaje_empateC4 = 100;
+    else if (dificultad == 2) puntaje_empateC4 = 200;
+    else puntaje_empateC4 = 400;
 
     while(1){
         int posicion;
@@ -422,16 +434,25 @@ void pve_c4(juego *j, int dificultad){
         mov->columna = columna;
         list_pushBack(historia,mov);
 
+        // SI SE GANA O SE EMPATA, SE REINICIA EL TABLERO.
         if(ganaron_c4(j,P1)){
             pintar(j);
             printf("!!!!ganaste\n");
-            registrar_puntaje(JUEGA_CONECTA4, 100);
-            break;
+            puntaje += puntaje_victoriaC4;
+            puts("");
+            printf("%d\n", puntaje);
+            reiniciar_tablero_c4(j);
+            //registrar_puntaje(JUEGA_CONECTA4, 100);
+            continue;
         }
         if(empate_c4(j)){
             pintar(j);
             printf("empataron");
-            break;
+            puntaje += puntaje_empateC4;
+            puts("");
+            printf("%d\n", puntaje);
+            reiniciar_tablero_c4(j);
+            continue;
         }
         int mov_maquina;
 
@@ -458,15 +479,19 @@ void pve_c4(juego *j, int dificultad){
         list_pushBack(historia,mov);
         if(ganaron_c4(j,P2)){
             pintar(j);
-            printf("!!!!ganaste la maquina\n");
+            printf("!!!!gano la maquina\n");
+            registrar_puntaje(JUEGA_CONECTA4, puntaje);
             break;
         }
         if(empate_c4(j)){
             pintar(j);
             printf("empataron");
-            break;
+            puntaje += puntaje_empateC4;
+            puts("");
+            printf("%d\n", puntaje);
+            reiniciar_tablero_c4(j);
+            continue;
         }
-        
     }
 }
 void pve_menu_c4(juego *j){

@@ -60,7 +60,6 @@ int empate(char tablero[][3]){
     return 1; // no hay espacios disponible por lo tanto no hay ganador
 }
 
-
 void pvp(char tablero[][3]){
     int posicion;
     char jugador = 'X';
@@ -91,7 +90,6 @@ void pvp(char tablero[][3]){
         if(ganador(jugador, tablero)){
             mostrar_tablero_gato(tablero);
             printf("jugador %c gana!\n", jugador);
-            registrar_puntaje(JUEGA_GATO, 50);
             break;
         }
         if(empate(tablero)){
@@ -104,7 +102,6 @@ void pvp(char tablero[][3]){
         if(jugador == 'X') jugador = 'O';
         else jugador = 'X';
     }
-
 }
 
 void mostrar_menu_dificultades_gato(){
@@ -227,6 +224,17 @@ void mov_minimax(char tablero[][3], char cpu){
 void pve(char tablero[][3], char dificultad, char cpu){
     int posicion;
     int random;
+    int puntaje = 0;
+    int puntaje_victoriaGT;
+    int puntaje_empateGT;
+
+    if (dificultad == '1') puntaje_victoriaGT = 250;
+    else if (dificultad == '2') puntaje_victoriaGT = 500;
+    else puntaje_victoriaGT = 1250;
+
+    if (dificultad == '1') puntaje_empateGT = 100;
+    if (dificultad == '2') puntaje_empateGT = 300;
+    else puntaje_empateGT = 650;
 
     while(1){
         mostrar_tablero_gato(tablero);
@@ -253,14 +261,19 @@ void pve(char tablero[][3], char dificultad, char cpu){
         if(ganador('X', tablero)){
             mostrar_tablero_gato(tablero);
             printf("jugador X gana!\n");
-            registrar_puntaje(JUEGA_GATO, 50);
-            break;
+            reiniciar_tablero(tablero);
+            puntaje += puntaje_victoriaGT;
+            printf("\n %d \n", puntaje);
+            continue;
         }
 
         if(empate(tablero)){
             mostrar_tablero_gato(tablero);
             printf("Empate!\n");
-            break;
+            reiniciar_tablero(tablero);
+            puntaje += puntaje_empateGT;
+            printf("\n %d \n", puntaje);
+            continue;
         }
 
         //turno del cpu
@@ -287,13 +300,17 @@ void pve(char tablero[][3], char dificultad, char cpu){
         if(ganador(cpu, tablero)){
             mostrar_tablero_gato(tablero);
             printf("Cpu gana!\n");
+            registrar_puntaje(JUEGA_GATO, puntaje);
             break;
         }
 
         if(empate(tablero)){
             mostrar_tablero_gato(tablero);
             printf("Empate!\n");
-            break;
+            reiniciar_tablero(tablero);
+            puntaje += puntaje_empateGT;
+            printf("\n %d \n", puntaje);
+            continue;
         }
     }
 
