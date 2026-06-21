@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ranking.h"
-#include "heap.h"
+#include "juegos/ranking.h"
+#include "tdas/heap.h"
 #include "tdas/list.h"
 #include "tdas/extra.h"
 

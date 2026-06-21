@@ -3,7 +3,7 @@
 #include "juegos/gato.h"
 #include "juegos/conecta4.h"
 #include "juegos/buscaminas.h"
-#include "ranking.h"
+#include "juegos/ranking.h"
 
 
 void mostrar_menu(){
@@ -51,12 +51,7 @@ int main(){
         puts("Opción no válida. Por favor, intente de nuevo.");
         }
         presioneTeclaParaContinuar();
-<<<<<<< HEAD
-    } while(opcion != '4');
-
-=======
     } while(opcion != '5');
     liberar_ranking();
->>>>>>> 1fc5f5d61bd1a0deb49e11fbb35582d982d290a0
     return 0;
 }
