@@ -248,7 +248,7 @@ int minimax_conecta4(nodo *n, int profundidad, int alfa, int beta, int es_max, c
     char siguiente = (jugador_actual == P2) ? P1 : P2;
 
     if(n->cantidad_hijos == 0){
-        movimiento_nodo(n, jugador_actual);
+        movimiento_nodo(n, siguiente);
     }
 
     if(es_max){
