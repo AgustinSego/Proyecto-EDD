@@ -300,7 +300,7 @@ int maquina_facil(juego *j){
     }while(!columna_valida(j,columna));
 
     return columna;
-    
+
 }
 int maquina_media(juego *j){
     juego copia;
@@ -367,6 +367,7 @@ int maquina_dificil(juego *j){
 void pvp_c4(juego *j){
     int posicion;
     char simbolo = P1;
+    int fichas_jugadas = 0;
 
     while (1){
         pintar(j);
@@ -381,22 +382,27 @@ void pvp_c4(juego *j){
         if(!(jugada(j,columna, simbolo))){
             continue;
         }
+
+        fichas_jugadas ++;
+
         if(empate_c4(j)){
             printf("EMPATARON\n");
             break;
         }
         if(ganaron_c4(j,simbolo)){
             pintar(j);
-            printf("el jugador %c gano\n", simbolo);
+            printf("El jugador %c gano\n", simbolo);
+            //100 puntos base mas 15 puntos por cada espacio vacio que sobro en el tablero: a menos movimientos para ganar = mas espacios vacios
+            int puntaje_calculado = 100 + ((42-fichas_jugadas) * 15);
+
+            printf("¡Ganaste usando solo %d fichas en total!\nTu puntuacion es %d puntos", fichas_jugadas, puntaje_calculado);
+            registrar_puntaje(JUEGA_CONECTA4, puntaje_calculado);
             break;
         }
 
         if(simbolo == P1) simbolo = P2;
         else simbolo = P1;
     }
-
-        
-
 }
 // MODIFICACION IMPLEMENTACION DE BUCLE (MODO ARCADE).
 void pve_c4(juego *j, int dificultad){
@@ -501,7 +507,7 @@ void pve_menu_c4(juego *j){
             puts("=====================================================");
             puts("     Game-Hub: menu pve");
             puts("=====================================================");
-    
+
             puts("1) Jugar facil");
             puts("2) Jugar medio");
             puts("3) jugar dificil");
@@ -525,7 +531,7 @@ void pve_menu_c4(juego *j){
                 reiniciar_tablero_c4(j);
                 pve_c4(j,3);
                 break;
-                
+
             case '4':
                 puts("Saliendo de conecta4");
                 puts("Volviendo al menu principal");
@@ -536,7 +542,7 @@ void pve_menu_c4(juego *j){
             presioneTeclaParaContinuar();
         }while(opcion != '4');
 
-    
+
 }
 void mostrar_menu_conecta_c4(){
     limpiarPantalla();

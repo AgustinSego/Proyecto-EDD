@@ -236,7 +236,7 @@ void bfs(TableroBM* tablero, int pos_f, int pos_c)
                     {
                         tablero->matriz[vecino_fil][vecino_col].revelada = true;
                         tablero->puntaje += 10;
-                        
+
                         // se verifica si el vecino tiene 0 minas alrededor.
                         if (tablero->matriz[vecino_fil][vecino_col].minas_alrededor == 0) 
                         {
@@ -291,7 +291,7 @@ void jugarBM(TableroBM* tablero, char dificultad)
         // se le resta 1 a cada parametro porque si no se desfasa la posición.
         fila--;
         columna--;
-        
+
         // se verifica que se encuentre dentro del tablero.
         if (fila < 0 || fila >= tablero->filas || columna < 0 || columna >= tablero->columnas) 
         {

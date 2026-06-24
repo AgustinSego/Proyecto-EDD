@@ -77,7 +77,7 @@ void pvp(char tablero[][3]){
 
         int fila = (posicion - 1) / 3; // formula para pasar de un numero a una coord de matriz (fila)
         int columna = (posicion - 1) % 3; // formula para pasar de un numero a una coord de matriz (matriz)
-        
+
         // evalua si es una casilla valida
         if(tablero[fila][columna] == 'X' || tablero[fila][columna] == 'O'){
             printf("casilla ocupada");
@@ -89,7 +89,19 @@ void pvp(char tablero[][3]){
         // resultados de la partida
         if(ganador(jugador, tablero)){
             mostrar_tablero_gato(tablero);
-            printf("jugador %c gana!\n", jugador);
+            int espacios_vacios = 0;
+            for(int i = 0; i < 3; i ++){
+                for (int j = 0; j < 3; j++){
+                    if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
+                        espacios_vacios ++;
+                    }
+                }
+            }
+            int puntaje_calculado = 50 + (espacios_vacios * 15);
+            printf("Jugador %c gana!\n", jugador);
+            printf("Puntaje es %d", puntaje_calculado);
+
+            registrar_puntaje(JUEGA_GATO, puntaje_calculado);
             break;
         }
         if(empate(tablero)){
@@ -238,7 +250,7 @@ void pve(char tablero[][3], char dificultad, char cpu){
 
     while(1){
         mostrar_tablero_gato(tablero);
-        
+
         //turno de el jugador 
         printf("jugador X, elige una posicion:");
         scanf("%d", &posicion);
@@ -250,7 +262,7 @@ void pve(char tablero[][3], char dificultad, char cpu){
 
         int fila = (posicion - 1) / 3;
         int columna = (posicion - 1) % 3; 
-        
+
         if(tablero[fila][columna] == 'X' || tablero[fila][columna] == 'O'){
             printf("casilla ocupada");
             continue;
@@ -338,6 +350,9 @@ void pve_menu(char tablero[][3]){
             reiniciar_tablero(tablero);
             pve(tablero, opcion, 'O');
             break;
+        case '4':
+            printf("Saliendo de la opcion pve...");
+            break; 
         default:
             puts("Opción de dificultad no válida. Por favor, intente de nuevo.");
         }
@@ -353,7 +368,7 @@ void gato(){
         {'4', '5', '6'},
         {'7', '8', '9'}
     };
-    
+
     do
     {
         mostrar_menu_gato();
