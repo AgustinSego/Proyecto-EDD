@@ -3,6 +3,7 @@ run = "./tarea3"
 
 [agent]
 expertMode = true
+stack = "BEST_EFFORT_FALLBACK"
 
 [deployment]
 deploymentTarget = "cloudrun"
