@@ -13,6 +13,14 @@ Y luego ejecutar:
 ````
 ./programa.exe   
 ````
+
+````
+gcc -I. -shared -Wno-unused-result -o libgamehub.dll juegos/*.c tdas/*.c
+````
+
+````
+py main.py
+````
 utilicen el .exe porque despues parece que va a servir para usarlo con tkinter para la interfaz
 
 cosas a mejorar:
