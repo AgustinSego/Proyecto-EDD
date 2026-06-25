@@ -90,11 +90,13 @@ void liberar_ranking(){
     while (rec != NULL) { free(rec); rec = (RecordRanking *)list_next(lista_gato); }
     list_clean(lista_gato); free(lista_gato);
   }
+  
   if (lista_conecta4 != NULL) {
     RecordRanking *rec = (RecordRanking *)list_first(lista_conecta4);
     while (rec != NULL) { free(rec); rec = (RecordRanking *)list_next(lista_conecta4); }
     list_clean(lista_conecta4); free(lista_conecta4);
   }
+  
   if (lista_buscaminas != NULL) {
     RecordRanking *rec = (RecordRanking *)list_first(lista_buscaminas);
     while (rec != NULL) { free(rec); rec = (RecordRanking *)list_next(lista_buscaminas); }
