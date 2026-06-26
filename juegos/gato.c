@@ -89,19 +89,7 @@ void pvp(char tablero[][3]){
         // resultados de la partida
         if(ganador(jugador, tablero)){
             mostrar_tablero_gato(tablero);
-            int espacios_vacios = 0;
-            for(int i = 0; i < 3; i ++){
-                for (int j = 0; j < 3; j++){
-                    if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
-                        espacios_vacios ++;
-                    }
-                }
-            }
-            int puntaje_calculado = 50 + (espacios_vacios * 15);
             printf("Jugador %c gana!\n", jugador);
-            printf("Puntaje es %d", puntaje_calculado);
-
-            registrar_puntaje(JUEGA_GATO, puntaje_calculado);
             break;
         }
         if(empate(tablero)){

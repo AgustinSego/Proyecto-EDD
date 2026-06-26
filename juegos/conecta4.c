@@ -392,11 +392,8 @@ void pvp_c4(juego *j){
         if(ganaron_c4(j,simbolo)){
             pintar(j);
             printf("El jugador %c gano\n", simbolo);
-            //100 puntos base mas 15 puntos por cada espacio vacio que sobro en el tablero: a menos movimientos para ganar = mas espacios vacios
-            int puntaje_calculado = 100 + ((42-fichas_jugadas) * 15);
 
-            printf("¡Ganaste usando solo %d fichas en total!\nTu puntuacion es %d puntos", fichas_jugadas, puntaje_calculado);
-            registrar_puntaje(JUEGA_CONECTA4, puntaje_calculado);
+            printf("¡Ganaste usando solo %d fichas en total!", fichas_jugadas);
             break;
         }
 

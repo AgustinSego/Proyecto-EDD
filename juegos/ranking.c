@@ -63,13 +63,15 @@ void procesar_y_mostrar_subranking(List *lista_juego, const char *titulo_juego){
   printf("  ------------------------------------------\n");
 
   int posicion = 1;
-  while (heap_top(pq_temporal) != NULL) {
-      RecordRanking *rec = (RecordRanking *)heap_top(pq_temporal);
-      printf("   %-5d | %-20s | %-10d\n", posicion++, rec->nombre, rec->puntaje);
-      heap_pop(pq_temporal);
-  }
+  while (heap_top(pq_temporal) != NULL && posicion <= 3) {
+    RecordRanking *rec = (RecordRanking *)heap_top(pq_temporal);
 
-  free(pq_temporal);
+    printf("   %-5d | %-20s | %-10d\n", posicion, rec->nombre, rec->puntaje);
+
+    heap_pop(pq_temporal);
+    posicion++;
+  }
+    free(pq_temporal); 
 }
 
 void mostrar_ranking(){
@@ -87,19 +89,30 @@ void mostrar_ranking(){
 void liberar_ranking(){
   if (lista_gato != NULL) {
     RecordRanking *rec = (RecordRanking *)list_first(lista_gato);
-    while (rec != NULL) { free(rec); rec = (RecordRanking *)list_next(lista_gato); }
+    while (rec != NULL) { 
+      free(rec); 
+      rec = (RecordRanking *)list_next(lista_gato); 
+    }
     list_clean(lista_gato); free(lista_gato);
   }
   
   if (lista_conecta4 != NULL) {
     RecordRanking *rec = (RecordRanking *)list_first(lista_conecta4);
-    while (rec != NULL) { free(rec); rec = (RecordRanking *)list_next(lista_conecta4); }
-    list_clean(lista_conecta4); free(lista_conecta4);
+    while (rec != NULL) { 
+      free(rec); 
+      rec = (RecordRanking *)list_next(lista_conecta4);
+    }
+    list_clean(lista_conecta4); 
+    free(lista_conecta4);
   }
   
   if (lista_buscaminas != NULL) {
     RecordRanking *rec = (RecordRanking *)list_first(lista_buscaminas);
-    while (rec != NULL) { free(rec); rec = (RecordRanking *)list_next(lista_buscaminas); }
-    list_clean(lista_buscaminas); free(lista_buscaminas);
+    while (rec != NULL) { 
+      free(rec); 
+      rec = (RecordRanking *)list_next(lista_buscaminas); 
+    }
+    list_clean(lista_buscaminas); 
+    free(lista_buscaminas);
   }
 }
