@@ -427,19 +427,19 @@ void buscaminas()
         {
             case '1':
                 tablero = crear_tableroBM(8, 8, 10);
-                jugarBM(tablero, 1);
+                jugarBM(tablero, '1');
                 liberar_memoriaBM(tablero);
                 break;
 
             case '2':
                 tablero = crear_tableroBM(16, 16, 40);
-                jugarBM(tablero, 2);
+                jugarBM(tablero, '2');
                 liberar_memoriaBM(tablero);
                 break;
 
             case '3':
                 tablero = crear_tableroBM(24, 24, 99);
-                jugarBM(tablero, 3);
+                jugarBM(tablero, '3');
                 liberar_memoriaBM(tablero);
                 break;
 
@@ -455,7 +455,7 @@ void buscaminas()
                 // ya que es un tablero 3 x 3.
             case '9':
                 tablero = crear_tableroBM(3, 3, 2);
-                jugarBM(tablero, 3);
+                jugarBM(tablero, '3');
                 liberar_memoriaBM(tablero);
                 break;
 
