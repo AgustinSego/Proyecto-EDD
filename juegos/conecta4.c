@@ -403,7 +403,6 @@ void pvp_c4(juego *j){
 }
 // MODIFICACION IMPLEMENTACION DE BUCLE (MODO ARCADE).
 void pve_c4(juego *j, int dificultad){
-    List *historia = list_create();
     int puntaje = 0;
     int puntaje_victoriaC4;
     int puntaje_empateC4;
@@ -430,12 +429,6 @@ void pve_c4(juego *j, int dificultad){
         int columna = posicion -1;
         if(!jugada(j,columna,P1))
             continue;
-
-        movimiento *mov = malloc(sizeof(movimiento));
-
-        mov->jugador = P1;
-        mov->columna = columna;
-        list_pushBack(historia,mov);
 
         // SI SE GANA O SE EMPATA, SE REINICIA EL TABLERO.
         if(ganaron_c4(j,P1)){
@@ -475,11 +468,6 @@ void pve_c4(juego *j, int dificultad){
         printf("la maquina juega en la columna %d\n", mov_maquina +1);
 
         jugada(j,mov_maquina,P2);
-        mov = malloc(sizeof(movimiento));
-
-        mov->jugador = P2;
-        mov->columna = mov_maquina;
-        list_pushBack(historia,mov);
         if(ganaron_c4(j,P2)){
             pintar(j);
             printf("!!!!gano la maquina\n");
@@ -584,4 +572,5 @@ void conecta4(){
         }
         presioneTeclaParaContinuar();
     }while(opcion != '3');
+    free(tablero);
 }
