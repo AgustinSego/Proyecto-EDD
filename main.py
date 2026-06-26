@@ -64,52 +64,48 @@ def registrar_puntaje(juego, puntaje):
             rankings[juego].sort(key=lambda x: x["puntaje"], reverse=True)
 
 def menu_ranking(frame):
-    tk.Label(frame, text="TABLA DE POSICIONES", font=("Arial", 18, "bold")).pack(pady=10)
+    tk.Label(frame, text="TABLA DE POSICIONES", font=("Arial", 24, "bold"), bg="black", fg="white").pack(pady=15)
     for juego, records in rankings.items():
-        tk.Label(frame, text=f">>> {juego} <<<", font=("Arial", 10, "bold"), fg="blue").pack(pady=2)
+        tk.Label(frame, text=f">>> {juego} <<<", font=("Arial", 14, "bold"), bg="black", fg="#00FFFF").pack(pady=5)
         if not records:
-            tk.Label(frame, text="[No hay datos]", font=("Arial", 9)).pack()
+            tk.Label(frame, text="[No hay datos]", font=("Arial", 12), bg="black", fg="gray").pack()
         else:
             for i, r in enumerate(records[:3]):
-                tk.Label(frame, text=f"{i+1}. {r['nombre']} - {r['puntaje']} pts", font=("Arial", 9)).pack()
+                tk.Label(frame, text=f"{i+1}. {r['nombre']} - {r['puntaje']} pts", font=("Arial", 12), bg="black", fg="white").pack()
     
-    tk.Button(frame, text="Volver al Menu Principal", width=20, font=("Arial", 10), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=15)
+    tk.Button(frame, text="Volver al Menu Principal", width=25, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=20)
 
 # =====================================================================
 # 3. CONFIGURACIÓN VISUAL MAESTRA
 # =====================================================================
 ventana = tk.Tk()
 ventana.title("GAME HUB - Arcade Edition")
-ventana.geometry("800x800")
-ventana.configure(bg="black") # Fondo negro por si la imagen no cubre todo
+ventana.geometry("1080x1280")
+ventana.configure(bg="black")
 
 # --- CARGAR IMÁGENES PIXEL ART ---
-# --- CARGAR IMÁGENES PIXEL ART ---
 try:
-    img_arcade = tk.PhotoImage(file="banner.png").zoom(2) # Cambiado a "banner .png"
-    img_pantalla = tk.PhotoImage(file="pantalla.png")      # Cambiado a "pantalla.png"
+    img_arcade = tk.PhotoImage(file="banner.png").zoom(3) 
+    img_pantalla = tk.PhotoImage(file="pantalla.png").zoom(2)
 except Exception as e:
     print(f"Error cargando imágenes: {e}")
     img_arcade = None
     img_pantalla = None
 
-# Fondo del gabinete Arcade
 lbl_arcade = tk.Label(ventana, image=img_arcade, bg="black")
 lbl_arcade.place(relx=0.5, rely=0.5, anchor="center")
 
 # =====================================================================
 # ZONA DE CALIBRACIÓN DE LA PANTALLA AZUL
-# Ajusta estos números para que encaje perfecto en el cristal de tu dibujo
 # =====================================================================
-ANCHO_PANTALLA = 370  
-ALTO_PANTALLA = 270   
+ANCHO_PANTALLA = 600  
+ALTO_PANTALLA = 480   
 EJE_X_REL = 0.51       
-EJE_Y_REL = 0.5
+EJE_Y_REL = 0.5   
 
-# Este Frame invisible es el contenedor estricto de tu pantalla
 pantalla_arcade = tk.Frame(ventana, width=ANCHO_PANTALLA, height=ALTO_PANTALLA, bg="black")
 pantalla_arcade.place(relx=EJE_X_REL, rely=EJE_Y_REL, anchor="center")
-pantalla_arcade.pack_propagate(False) # Evita que la pantalla cambie de tamaño
+pantalla_arcade.pack_propagate(False)
 
 frame_actual = None
 
@@ -118,56 +114,54 @@ def cambiar_pantalla(nueva_pantalla_func):
     if frame_actual is not None:
         frame_actual.destroy()
     
-    # Creamos el nuevo frame dentro de la pantalla del arcade
     frame_actual = tk.Frame(pantalla_arcade, bg="black")
     frame_actual.place(relwidth=1, relheight=1)
     
-    # Pintamos las rayas azules en el fondo del frame
     if img_pantalla:
-        fondo_rayas = tk.Label(frame_actual, image=img_pantalla)
+        fondo_rayas = tk.Label(frame_actual, image=img_pantalla, bg="black")
         fondo_rayas.place(x=0, y=0, relwidth=1, relheight=1)
         
     nueva_pantalla_func(frame_actual)
 
 # =====================================================================
-# 4. MENÚS Y LÓGICA DE JUEGOS (SIN NÚMEROS)
+# 4. MENÚS Y LÓGICA DE JUEGOS
 # =====================================================================
 
-# ---------------------------------------------------------------------
-# MENÚ PRINCIPAL
-# ---------------------------------------------------------------------
 def menu_principal(frame):
-    tk.Label(frame, text="GAME HUB", font=("Arial", 20, "bold")).pack(pady=15)
-    tk.Button(frame, text="Gato", width=15, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_gato)).pack(pady=4)
-    tk.Button(frame, text="Conecta 4", width=15, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_c4)).pack(pady=4)
-    tk.Button(frame, text="Buscaminas", width=15, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_bm)).pack(pady=4)
-    tk.Button(frame, text="Ver Ranking", width=15, font=("Arial", 12), fg="blue", command=lambda: cambiar_pantalla(menu_ranking)).pack(pady=4)
-    tk.Button(frame, text="Salir", width=15, font=("Arial", 12), fg="red", command=ventana.quit).pack(pady=10)
+    tk.Label(frame, text="GAME HUB", font=("Arial", 28, "bold")).pack(pady=20)
+    tk.Button(frame, text="Gato", width=20, font=("Arial", 16), command=lambda: cambiar_pantalla(menu_gato)).pack(pady=5)
+    tk.Button(frame, text="Conecta 4", width=20, font=("Arial", 16), command=lambda: cambiar_pantalla(menu_c4)).pack(pady=5)
+    tk.Button(frame, text="Buscaminas", width=20, font=("Arial", 16), command=lambda: cambiar_pantalla(menu_bm)).pack(pady=5)
+    tk.Button(frame, text="Ver Ranking", width=20, font=("Arial", 16), fg="blue", command=lambda: cambiar_pantalla(menu_ranking)).pack(pady=5)
+    tk.Button(frame, text="Salir", width=20, font=("Arial", 16), fg="red", command=ventana.quit).pack(pady=20)
 
 # ---------------------------------------------------------------------
 # GATO
 # ---------------------------------------------------------------------
 def menu_gato(frame):
-    tk.Label(frame, text="GATO", font=("Arial", 18, "bold")).pack(pady=15)
-    tk.Button(frame, text="Jugar PvP", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pvp", 0))).pack(pady=5)
-    tk.Button(frame, text="Jugar PvE", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_gato_pve)).pack(pady=5)
-    tk.Button(frame, text="Volver al Menu Principal", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=20)
+    tk.Label(frame, text="GATO", font=("Arial", 24, "bold")).pack(pady=20)
+    tk.Button(frame, text="Jugar PvP", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pvp", 0))).pack(pady=10)
+    tk.Button(frame, text="Jugar PvE", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(menu_gato_pve)).pack(pady=10)
+    tk.Button(frame, text="Volver al Menu Principal", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=25)
 
 def menu_gato_pve(frame):
-    tk.Label(frame, text="GATO - PvE", font=("Arial", 18, "bold")).pack(pady=15)
-    tk.Button(frame, text="Fácil", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pve", 1))).pack(pady=5)
-    tk.Button(frame, text="Normal", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pve", 2))).pack(pady=5)
-    tk.Button(frame, text="Difícil", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pve", 3))).pack(pady=5)
-    tk.Button(frame, text="Volver al Menu de Gato", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_gato)).pack(pady=20)
+    tk.Label(frame, text="GATO - PvE", font=("Arial", 24, "bold")).pack(pady=20)
+    tk.Button(frame, text="Fácil", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pve", 1))).pack(pady=5)
+    tk.Button(frame, text="Normal", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pve", 2))).pack(pady=5)
+    tk.Button(frame, text="Difícil", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_gato(f, "pve", 3))).pack(pady=5)
+    tk.Button(frame, text="Volver al Menu de Gato", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(menu_gato)).pack(pady=25)
 
 def juego_gato(frame, modo, dif):
     tablero_c = TableroGato((b'1', b'2', b'3'), (b'4', b'5', b'6'), (b'7', b'8', b'9'))
     botones = [[None]*3 for _ in range(3)]
     turno = [b'X'] 
 
-    tk.Label(frame, text=f"Gato - {modo.upper()}", font=("Arial", 14, "bold")).pack(pady=5)
+    tk.Label(frame, text=f"Gato - {modo.upper()}", font=("Arial", 18, "bold")).pack(pady=10)
+    
+    tk.Button(frame, text="Abandonar", fg="red", font=("Arial", 12, "bold"), command=lambda: cambiar_pantalla(menu_gato)).pack(side="bottom", pady=15)
+    
     grilla = tk.Frame(frame)
-    grilla.pack()
+    grilla.pack(expand=True)
 
     def sync_ui():
         for i in range(3):
@@ -183,15 +177,16 @@ def juego_gato(frame, modo, dif):
         sync_ui()
 
         if lib.ganador(turno[0], tablero_c):
-            espacios_vacios = sum(1 for i in range(3) for j in range(3) if tablero_c[i][j] not in (b'X', b'O'))
-            if modo == "pvp": pts = 50 + (espacios_vacios * 15)
-            elif dif == 1: pts = 250
-            elif dif == 2: pts = 500
-            else: pts = 1250
-            
-            messagebox.showinfo("Gato", f"¡Gana {turno[0].decode()}!\nPuntaje: {pts}")
-            if turno[0] == b'X': registrar_puntaje("Gato", pts)
-            cambiar_pantalla(menu_gato)
+            if modo == "pvp":
+                messagebox.showinfo("Gato", f"¡Gana el Jugador {turno[0].decode()}!")
+            else:
+                if dif == 1: pts = 250
+                elif dif == 2: pts = 500
+                else: pts = 1250
+                messagebox.showinfo("Gato", f"¡Gana {turno[0].decode()}!\nPuntaje: {pts}")
+                registrar_puntaje("Gato", pts)
+                
+            cambiar_pantalla(lambda frm: juego_gato(frm, modo, dif))
             return
 
         if lib.empate(tablero_c):
@@ -202,16 +197,15 @@ def juego_gato(frame, modo, dif):
                 messagebox.showinfo("Gato", f"¡Empate!\nPuntaje: {pts}")
                 registrar_puntaje("Gato", pts)
             else:
-                messagebox.showinfo("Gato", "¡Empate!")
-            cambiar_pantalla(menu_gato)
+                messagebox.showinfo("Gato", "¡Es un Empate!")
+            cambiar_pantalla(lambda frm: juego_gato(frm, modo, dif))
             return
 
         if modo == "pvp":
             turno[0] = b'O' if turno[0] == b'X' else b'X'
         else:
             probabilidad = random.randint(1, 100)
-            if dif == 1:
-                lib.movimiento_aleatorio(tablero_c, b'O')
+            if dif == 1: lib.movimiento_aleatorio(tablero_c, b'O')
             elif dif == 2:
                 if probabilidad <= 50: lib.movimiento_aleatorio(tablero_c, b'O')
                 else: lib.mov_minimax(tablero_c, b'O')
@@ -223,36 +217,34 @@ def juego_gato(frame, modo, dif):
             
             if lib.ganador(b'O', tablero_c):
                 messagebox.showinfo("Gato", "¡Gana la CPU!")
-                cambiar_pantalla(menu_gato)
+                cambiar_pantalla(lambda frm: juego_gato(frm, modo, dif))
                 return
             if lib.empate(tablero_c):
                 messagebox.showinfo("Gato", "¡Empate!")
-                cambiar_pantalla(menu_gato)
+                cambiar_pantalla(lambda frm: juego_gato(frm, modo, dif))
                 return
 
     for i in range(3):
         for j in range(3):
-            b = tk.Button(grilla, text="", width=3, height=1, font=("Arial", 20), command=lambda f=i, c=j: click(f, c))
+            b = tk.Button(grilla, text="", width=4, height=2, font=("Arial", 24, "bold"), command=lambda f=i, c=j: click(f, c))
             b.grid(row=i, column=j, padx=2, pady=2)
             botones[i][j] = b
-
-    tk.Button(frame, text="Abandonar", fg="red", command=lambda: cambiar_pantalla(menu_gato)).pack(pady=10)
 
 # ---------------------------------------------------------------------
 # CONECTA 4
 # ---------------------------------------------------------------------
 def menu_c4(frame):
-    tk.Label(frame, text="CONECTA 4", font=("Arial", 18, "bold")).pack(pady=15)
-    tk.Button(frame, text="Jugar PvP", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pvp", 0))).pack(pady=5)
-    tk.Button(frame, text="Jugar PvE", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_c4_pve)).pack(pady=5)
-    tk.Button(frame, text="Volver al Menu Principal", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=20)
+    tk.Label(frame, text="CONECTA 4", font=("Arial", 24, "bold")).pack(pady=20)
+    tk.Button(frame, text="Jugar PvP", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pvp", 0))).pack(pady=10)
+    tk.Button(frame, text="Jugar PvE", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(menu_c4_pve)).pack(pady=10)
+    tk.Button(frame, text="Volver al Menu Principal", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=25)
 
 def menu_c4_pve(frame):
-    tk.Label(frame, text="CONECTA 4 - PvE", font=("Arial", 18, "bold")).pack(pady=15)
-    tk.Button(frame, text="Fácil", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pve", 1))).pack(pady=5)
-    tk.Button(frame, text="Medio", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pve", 2))).pack(pady=5)
-    tk.Button(frame, text="Difícil", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pve", 3))).pack(pady=5)
-    tk.Button(frame, text="Volver", width=20, font=("Arial", 12), command=lambda: cambiar_pantalla(menu_c4)).pack(pady=20)
+    tk.Label(frame, text="CONECTA 4 - PvE", font=("Arial", 24, "bold")).pack(pady=20)
+    tk.Button(frame, text="Fácil", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pve", 1))).pack(pady=5)
+    tk.Button(frame, text="Normal", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pve", 2))).pack(pady=5)
+    tk.Button(frame, text="Difícil", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_c4(f, "pve", 3))).pack(pady=5)
+    tk.Button(frame, text="Volver", width=25, font=("Arial", 14), command=lambda: cambiar_pantalla(menu_c4)).pack(pady=25)
 
 def juego_c4(frame, modo, dif):
     tablero = JuegoC4()
@@ -264,9 +256,12 @@ def juego_c4(frame, modo, dif):
     turno = [b'A']
     fichas_jugadas = [0]
 
-    tk.Label(frame, text=f"Conecta 4 - {modo.upper()}", font=("Arial", 12, "bold")).pack(pady=2)
+    tk.Label(frame, text=f"Conecta 4 - {modo.upper()}", font=("Arial", 18, "bold")).pack(pady=10)
+    
+    tk.Button(frame, text="Abandonar", fg="red", font=("Arial", 12, "bold"), command=lambda: cambiar_pantalla(menu_c4)).pack(side="bottom", pady=15)
+    
     grilla = tk.Frame(frame)
-    grilla.pack(pady=2)
+    grilla.pack(expand=True)
 
     def sync_ui():
         for i in range(6):
@@ -282,14 +277,16 @@ def juego_c4(frame, modo, dif):
         sync_ui()
 
         if lib.ganaron_c4(ctypes.byref(tablero), turno[0]):
-            if modo == "pvp": pts = 100 + ((42 - fichas_jugadas[0]) * 15)
-            elif dif == 1: pts = 250
-            elif dif == 2: pts = 500
-            else: pts = 1000
-            
-            messagebox.showinfo("C4", f"¡Gana el jugador {turno[0].decode()}!\nPuntaje: {pts}")
-            if turno[0] == b'A': registrar_puntaje("Conecta 4", pts)
-            cambiar_pantalla(menu_c4)
+            if modo == "pvp":
+                messagebox.showinfo("C4", f"¡Gana el Jugador {turno[0].decode()}!")
+            else:
+                if dif == 1: pts = 250
+                elif dif == 2: pts = 500
+                else: pts = 1000
+                messagebox.showinfo("C4", f"¡Gana el jugador {turno[0].decode()}!\nPuntaje: {pts}")
+                registrar_puntaje("Conecta 4", pts)
+                
+            cambiar_pantalla(lambda frm: juego_c4(frm, modo, dif))
             return
 
         if lib.empate_c4(ctypes.byref(tablero)):
@@ -300,8 +297,8 @@ def juego_c4(frame, modo, dif):
                 messagebox.showinfo("C4", f"¡Empate!\nPuntaje: {pts}")
                 registrar_puntaje("Conecta 4", pts)
             else:
-                messagebox.showinfo("C4", "¡Empate!")
-            cambiar_pantalla(menu_c4)
+                messagebox.showinfo("C4", "¡Es un Empate!")
+            cambiar_pantalla(lambda frm: juego_c4(frm, modo, dif))
             return
 
         if modo == "pvp":
@@ -317,40 +314,52 @@ def juego_c4(frame, modo, dif):
 
             if lib.ganaron_c4(ctypes.byref(tablero), b'B'):
                 messagebox.showinfo("C4", "¡Gana la CPU!")
-                cambiar_pantalla(menu_c4)
+                cambiar_pantalla(lambda frm: juego_c4(frm, modo, dif))
                 return
             if lib.empate_c4(ctypes.byref(tablero)):
                 messagebox.showinfo("C4", "¡Empate!")
-                cambiar_pantalla(menu_c4)
+                cambiar_pantalla(lambda frm: juego_c4(frm, modo, dif))
                 return
 
     for i in range(6):
         for j in range(7):
-            b = tk.Button(grilla, text=".", width=2, height=1, font=("Arial", 10, "bold"), 
-                          command=lambda c=j: click(c))
+            b = tk.Button(grilla, text=".", width=4, height=2, font=("Arial", 12, "bold"), command=lambda c=j: click(c))
             b.grid(row=i, column=j, padx=1, pady=1)
             botones[i][j] = b
-
-    tk.Button(frame, text="Abandonar", fg="red", command=lambda: cambiar_pantalla(menu_c4)).pack(pady=5)
 
 # ---------------------------------------------------------------------
 # BUSCAMINAS
 # ---------------------------------------------------------------------
 def menu_bm(frame):
-    tk.Label(frame, text="BUSCAMINAS", font=("Arial", 18, "bold")).pack(pady=15)
-    tk.Button(frame, text="Fácil (8x8)", width=25, font=("Arial", 11), command=lambda: cambiar_pantalla(lambda f: juego_bm(f, 8, 8, 10))).pack(pady=5)
-    tk.Button(frame, text="Moderada (16x16)", width=25, font=("Arial", 11), command=lambda: cambiar_pantalla(lambda f: juego_bm(f, 16, 16, 40))).pack(pady=5)
-    tk.Button(frame, text="Difícil (24x24)", width=25, font=("Arial", 11), command=lambda: cambiar_pantalla(lambda f: juego_bm(f, 24, 24, 99))).pack(pady=5)
-    tk.Button(frame, text="Volver al Menu Principal", width=25, font=("Arial", 11), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=20)
+    tk.Label(frame, text="BUSCAMINAS", font=("Arial", 24, "bold")).pack(pady=20)
+    tk.Button(frame, text="Fácil (8x8)", width=30, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_bm(f, 8, 8, 10))).pack(pady=5)
+    tk.Button(frame, text="Normal (16x16)", width=30, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_bm(f, 16, 16, 40))).pack(pady=5)
+    tk.Button(frame, text="Difícil (24x24)", width=30, font=("Arial", 14), command=lambda: cambiar_pantalla(lambda f: juego_bm(f, 24, 24, 99))).pack(pady=5)
+    tk.Button(frame, text="Volver al Menu Principal", width=30, font=("Arial", 14), command=lambda: cambiar_pantalla(menu_principal)).pack(pady=25)
 
 def juego_bm(frame, filas, columnas, minas):
     tablero_ptr = lib.crear_tableroBM(filas, columnas, minas)
     primer_mov = [True]
     botones = [[None]*columnas for _ in range(filas)]
 
-    tk.Label(frame, text=f"Buscaminas ({filas}x{columnas})", font=("Arial", 12, "bold")).pack(pady=2)
-    grilla = tk.Frame(frame)
-    grilla.pack()
+    tk.Label(frame, text=f"Buscaminas ({filas}x{columnas})", font=("Arial", 14, "bold"), bg="#88b8db").pack(pady=2)
+    
+    def salir_bm():
+        lib.liberar_memoriaBM(tablero_ptr)
+        cambiar_pantalla(menu_bm)
+
+    # Botón anclado abajo
+    tk.Button(frame, text="Abandonar", fg="red", font=("Arial", 12, "bold"), command=salir_bm).pack(side="bottom", pady=5)
+    
+    grilla = tk.Frame(frame, bg="black")
+    grilla.pack(expand=True)
+
+    pixel = tk.PhotoImage(width=1, height=1)
+    grilla.pixel = pixel 
+
+    def reiniciar_bucle_bm():
+        lib.liberar_memoriaBM(tablero_ptr)
+        cambiar_pantalla(lambda frm: juego_bm(frm, filas, columnas, minas))
 
     def sync_ui(mostrar_minas_al_perder=False):
         for i in range(filas):
@@ -379,7 +388,7 @@ def juego_bm(frame, filas, columnas, minas):
             pts_perdida = tablero_ptr.contents.puntaje
             messagebox.showerror("BOOM", f"Pisaste una mina.\nPuntaje parcial: {pts_perdida}")
             registrar_puntaje("Buscaminas", pts_perdida)
-            salir_bm()
+            reiniciar_bucle_bm() 
             return
 
         if casilla.minas_alrededor == 0: lib.bfs(tablero_ptr, f, c)
@@ -398,7 +407,7 @@ def juego_bm(frame, filas, columnas, minas):
             sync_ui(mostrar_minas_al_perder=True)
             messagebox.showinfo("Victoria", f"¡Encontraste todas las minas!\nPuntaje final: {puntaje_final}")
             registrar_puntaje("Buscaminas", puntaje_final)
-            salir_bm()
+            reiniciar_bucle_bm() 
 
     def click_derecho(event, f, c):
         casilla = tablero_ptr.contents.matriz[f][c]
@@ -406,22 +415,29 @@ def juego_bm(frame, filas, columnas, minas):
         casilla.bandera = not casilla.bandera
         sync_ui()
 
-    def salir_bm():
-        lib.liberar_memoriaBM(tablero_ptr)
-        cambiar_pantalla(menu_bm)
+    # 🌟 MATEMÁTICA ANTI-BORDES PARA QUE QUEPA PERFECTO 🌟
+    if filas == 24:
+        tamano_px = 13       # Más pequeño para compensar los bordes
+        fuente_btn = ("Arial", 6, "bold")
+        grosor_borde = 1
+    elif filas == 16:
+        tamano_px = 20
+        fuente_btn = ("Arial", 8, "bold")
+        grosor_borde = 1
+    else:
+        tamano_px = 40
+        fuente_btn = ("Arial", 12, "bold")
+        grosor_borde = 2
 
-    fuente_btn = ("Arial", 8, "bold") if filas > 8 else ("Arial", 10, "bold")
-    ancho_btn = 1 if filas >= 16 else 2
-    
     for i in range(filas):
         for j in range(columnas):
-            b = tk.Button(grilla, width=ancho_btn, height=1, font=fuente_btn)
+            # Añadimos highlightthickness=0 para quitar los márgenes ocultos de Tkinter
+            b = tk.Button(grilla, image=pixel, width=tamano_px, height=tamano_px, compound="c", 
+                            text="", font=fuente_btn, bd=grosor_borde, padx=0, pady=0, highlightthickness=0)
             b.bind("<Button-1>", lambda event, f=i, c=j: click_izquierdo(event, f, c))
             b.bind("<Button-3>", lambda event, f=i, c=j: click_derecho(event, f, c))
             b.grid(row=i, column=j)
             botones[i][j] = b
-
-    tk.Button(frame, text="Abandonar", fg="red", command=salir_bm).pack(pady=5)
 
 # =====================================================================
 # INICIO DEL PROGRAMA
