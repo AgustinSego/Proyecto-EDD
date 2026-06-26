@@ -250,6 +250,7 @@ void bfs(TableroBM* tablero, int pos_f, int pos_c)
                 }
             }
         }
+        free(actual);
     }
     free(cola);
 }
