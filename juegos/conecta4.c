@@ -10,7 +10,7 @@
 #define P2 'B'
 #define filas 6
 #define columnas 7
-
+// destruye el grafo para que no haya fuga de memoria
 void destruir_grafo(nodo *nodo){
     if(nodo == NULL){
         return;
@@ -20,9 +20,11 @@ void destruir_grafo(nodo *nodo){
     }
     free(nodo);
 }
+//verifica si la columna que intenta jugar la maquina es valida o no
 int columna_valida(juego *j, int columna){
     return columna >= 0 && columna < columnas && j->table[0][columna] == '.';
 }
+//copia el tablero para que la maquina pueda modificarlo a su justo sin afectar al tablero original
 void copiar_tablero(juego *origen, juego *destino){
     for(short i = 0; i < filas; i++){
         for(short k = 0; k < columnas; k++){
@@ -30,6 +32,7 @@ void copiar_tablero(juego *origen, juego *destino){
         }
     }
 }
+//crea el nodo con los 7 hijos que por ahora son iguales a null y con el estado que tiene y la columna que jugo
 nodo *crear_nodo(juego *j, int columna){
 
     nodo *nuevo = malloc(sizeof(nodo));
@@ -46,6 +49,7 @@ nodo *crear_nodo(juego *j, int columna){
 
     return nuevo;
 }
+//ase que cada hijo del nodo padre tenga su estado y la columna que jugo
 void movimiento_nodo(nodo *n, char jugador){
     n->cantidad_hijos = 0;
 
@@ -67,18 +71,20 @@ void movimiento_nodo(nodo *n, char jugador){
         n->hijos[n->cantidad_hijos++] = hijo;
     }
 }
+//pinta la tabla
 void pintar(juego *j){
     for(short q = 0; q < columnas; q++){
         printf(" %d", q +1);
-}
+    }
     printf("\n");
     for(short i = 0; i < filas; i++){
         for(short k = 0; k < columnas; k++){
             printf(" %c", j->table[i][k]);
-    }
-    printf("\n");
+        }
+        printf("\n");
     }
 }
+//reinicia el tablero despues de cada partida
 void reiniciar_tablero_c4(juego *j){
     for(short i = 0; i < filas; i++){
         for(short k = 0; k < columnas; k++){
@@ -86,6 +92,7 @@ void reiniciar_tablero_c4(juego *j){
         }
     }
 }
+//verifica si la juga que se iso es valida y la pone si no retorna a un 0
 int jugada(juego *j,int columna,char simbolo){
         for(int i = filas-1; i  >= 0; i--){
             if(j->table[i][columna] == '.'){
@@ -96,6 +103,7 @@ int jugada(juego *j,int columna,char simbolo){
     printf("la columna ya esta ocupada\n");
     return 0;
 }
+//verifica en cada columna si aun hay espacios vacios si no los hay es espate si los hay entonces continua el juego 
 int empate_c4(juego *j){
     for(short i = 0; i < filas; i++){
         for(short k = 0; k < columnas; k++){
@@ -104,6 +112,7 @@ int empate_c4(juego *j){
     }
     return 1;
 }
+//verifica si la maquina o jugador gano la partida con algunas de las posibles victorias
 int ganaron_c4(juego *j, char simbolo){
     for(int i = 0; i < filas; i++){
         for(int k = 0; k <= columnas - 4; k++){
@@ -148,6 +157,7 @@ int ganaron_c4(juego *j, char simbolo){
 
     return 0;
 }
+// evalua una parte del tablero que se le pasa y retorna a un puntaje dependiendo del estado de esa ventana
 int evaluar_ventana(char ventana[4], char simbolo){
 
     char rival;
@@ -188,6 +198,7 @@ int evaluar_ventana(char ventana[4], char simbolo){
 
     return puntaje;
 }
+//evalua el tablero dividiendo en varias ventanas sacndo es puntaje en varias ventanas y retorna el puntaje sumado de cada ventana
 int evaluar_tablero(juego *j, char simbolo){
     int puntaje = 0;
     char ventana[4];
@@ -231,6 +242,9 @@ int evaluar_tablero(juego *j, char simbolo){
     return puntaje;
 
 }
+//crea la ramificacion del arbol para que retorne la mejor jugada posible de esa ramificacion  evaluando cada jugada y manteniedno 
+// la que saco mejor puntaje dependiendo si jugo la maquina o el jugador si fue el jugador retorna el peor puntaje y tambien 
+// evalua si en esa jugada  la maquina gano , perdio o empato
 int minimax_conecta4(nodo *n, int profundidad, int alfa, int beta, int es_max, char jugador_actual){
 
     if(ganaron_c4(&n->estado, P2))
@@ -292,6 +306,7 @@ int minimax_conecta4(nodo *n, int profundidad, int alfa, int beta, int es_max, c
         return mejor;
     }
 }
+//retorna solamente a una columna aleatoria 
 int maquina_facil(juego *j){
     int columna;
 
@@ -302,6 +317,7 @@ int maquina_facil(juego *j){
     return columna;
 
 }
+//verifica si la maquina o el jugador estan apunto de ganar si es asi retorna a esa columna si no solamente juega una columana aleatoria 
 int maquina_media(juego *j){
     juego copia;
 
@@ -331,6 +347,8 @@ int maquina_media(juego *j){
     }
     return maquina_facil(j);
 }
+// se mueve por los hijos de la raiz que creo y obtine el mejor puntaje entre esos hijos y juega la columna de ese mejor hijo retornando
+//esa columna
 int maquina_dificil(juego *j){
 
     nodo *raiz = crear_nodo(j, -1);
@@ -364,6 +382,8 @@ int maquina_dificil(juego *j){
 
     return mejor_columna;
 }
+// crear el poder jugar contra otro jugador con el simple hecho de utilizar un while y cambiar el simbolo despues de cada ciclo
+// y finaliza cuando uno gana o empaten 
 void pvp_c4(juego *j){
     int posicion;
     char simbolo = P1;
@@ -402,6 +422,8 @@ void pvp_c4(juego *j){
     }
 }
 // MODIFICACION IMPLEMENTACION DE BUCLE (MODO ARCADE).
+// es casi lo mismo que pvp pero a la hora de jugar la maquina que ocurre en el mismo ciclo llama algunas de las funciones maquina para que
+//juegue esa columna que retorna la funcion y por cada jugada que ase el usario o la maquina verifica si gano o empataron
 void pve_c4(juego *j, int dificultad){
     int puntaje = 0;
     int puntaje_victoriaC4;
@@ -485,6 +507,7 @@ void pve_c4(juego *j, int dificultad){
         }
     }
 }
+//muestra las distintas dificultades y una ves elegida empieza el juego
 void pve_menu_c4(juego *j){
     char opcion;
     do{
@@ -529,6 +552,7 @@ void pve_menu_c4(juego *j){
 
 
 }
+//muestra el menu de conecta4
 void mostrar_menu_conecta_c4(){
     limpiarPantalla();
     puts("=====================================================");
@@ -539,6 +563,7 @@ void mostrar_menu_conecta_c4(){
     puts("2) Jugar PvE");
     puts("3) Volver al Menu Principal");
 }
+//es la funcion principal que inicia el juego si juega pvp o pve o si quiere salir tambien crea la tabla donde se juega 
 void conecta4(){
     char opcion;
     juego *tablero = malloc(sizeof(juego));
