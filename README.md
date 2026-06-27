@@ -20,12 +20,7 @@ GAME-HUB con interfaz gráfica:
 py main.py
 ````
 
-GAME-HUB sin interfaz gráfica:
-1. **Solo al ingresar por primera vez**.
-````
-gcc -I. tdas/*.c juegos/*.c main.c -o programa
-````
-2. Para ejecutar GAME-HUB (consola).
+GAME-HUB sin interfaz gráfica (interfaz consola):
 ````
 ./programa.exe
 ````
