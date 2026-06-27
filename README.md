@@ -94,5 +94,5 @@ GAME-HUB sin interfaz gráfica (interfaz consola):
 - Implementación del sistema de ranking y los sistemas de puntajes.
 
 ### Diego Andreoli (Comunicador):
-- Implementación del juego Conecta 4 PvP y PvE.
+- Implementación del juego Conecta 4 PvP y PvE (minimax).
 - Implementación de funciones derivadas de Conecta 4.
